@@ -1,0 +1,17 @@
+# Honeypot SSH Cowrie. A lancer UNIQUEMENT sur un serveur jetable (VPS dedie), jamais sur ton reseau perso.
+# Avant de lancer : deplace ton vrai sshd sur un autre port (voir README), sinon tu te bloques toi-meme.
+services:
+  cowrie:
+    image: cowrie/cowrie:latest
+    container_name: cowrie
+    restart: unless-stopped
+    ports:
+      - "22:2222"   # le port 22 du serveur arrive sur le faux SSH de Cowrie
+    volumes:
+      - cowrie-var:/cowrie/cowrie-git/var   # logs, fichiers telecharges par les bots, sessions
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  cowrie-var:
